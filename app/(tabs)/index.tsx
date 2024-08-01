@@ -4,6 +4,8 @@ import * as Facebook from "expo-auth-session/providers/facebook";
 import * as WebBrowser from "expo-web-browser";
 import { ThemedText } from "@/components/ThemedText";
 import { Link } from "expo-router";
+import { ThemedButton } from "@/components/ThemedButton";
+import { ThemedView } from "@/components/ThemedView";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -35,24 +37,22 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       {user ? (
         <Profile user={user} />
       ) : (
         <>
           <Button
             disabled={!request}
-            title="Sign in with Facebook"
+            title="Continue with Facebook"
             onPress={handlePressAsync}
           />
-        <Button title="Vibrate once" onPress={() => Vibration.vibrate()} />
-   
-          <Link href="/test" style={styles.link}>
-            <ThemedText type="link">Go to home screen!</ThemedText>
-          </Link>
+          {/* <Link href="/test" style={styles.link}>
+            <ThemedText>Go to home screen!</ThemedText>
+          </Link> */}
         </>
       )}
-    </View>
+    </ThemedView>
   );
 }
 
