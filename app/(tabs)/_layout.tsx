@@ -24,7 +24,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="AppleHealth"
         options={{
           title: 'Explore',
           tabBarIcon: ({ color, focused }) => (
@@ -33,9 +33,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="AppleHealth"
+        name="StepCounterComponent"
         options={{
-          title: 'Explore',
+          title: 'StepCounter',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
           ),
