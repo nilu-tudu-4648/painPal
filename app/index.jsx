@@ -29,7 +29,7 @@ const index = () => {
   };
 
   return (
-    <ThemedView>
+    <AppSafeView>
         <Image
           imageStyle={BenefitsStyle.imageStyle}
           style={BenefitsStyle.imageContainer}
@@ -129,7 +129,7 @@ const index = () => {
                 fontSize: resFontSize(1.7),
                 fontWeight: "500",
               }}
-              onPress={() => router.push("/benefits02")}
+              onPress={() => router.push("/Commit")}
             />
             <AppButton
               title={"I already have an account"}
@@ -185,7 +185,7 @@ const index = () => {
         <Value label="Distance" value="0,75 km" />
         <Value label="Flights Climbed" value="12" />
       </ThemedView> */}
-    </ThemedView>
+    </AppSafeView>
   );
 };
 

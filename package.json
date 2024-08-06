@@ -37,6 +37,7 @@
     "react-native": "0.74.3",
     "react-native-animated-nav-tab-bar": "^3.1.10",
     "react-native-calendars": "^1.1306.0",
+    "react-native-circular-progress": "^1.4.0",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-health": "^1.18.0",
     "react-native-health-connect": "^2.1.0",

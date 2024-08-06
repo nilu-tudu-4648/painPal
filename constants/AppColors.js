@@ -14,4 +14,5 @@ export const COLORS = {
   black2: "#344054",
   title: "#101828",
   text: "#475467",
+  circularRing:"#5FE9D0"
 };
