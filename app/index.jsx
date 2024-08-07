@@ -129,7 +129,7 @@ const index = () => {
                 fontSize: resFontSize(1.7),
                 fontWeight: "500",
               }}
-              onPress={() => router.push("/Commit")}
+              onPress={() => router.push("/benefits02")}
             />
             <AppButton
               title={"I already have an account"}

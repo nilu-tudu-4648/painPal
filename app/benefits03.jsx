@@ -114,7 +114,7 @@ const Benefits03 = () => {
                 fontSize: resFontSize(1.7),
                 fontWeight: "500",
               }}
-              onPress={() => router.push("/Commit")}
+              onPress={() => router.push("/(tabs)")}
             />
             <AppButton
               title={"I already have an account"}

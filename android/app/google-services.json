@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1029736652724",
+    "project_id": "painpal-efb4e",
+    "storage_bucket": "painpal-efb4e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029736652724:android:9eb7a7843b684d481ddce1",
+        "android_client_info": {
+          "package_name": "com.nirmitee.painPal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029736652724-s48kt1hu3tm0hv6hr6c9e4g0sa95u77g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nirmitee.painPal",
+            "certificate_hash": "74590ebb4de8b263a6f360f5d32b232986da9f68"
+          }
+        },
+        {
+          "client_id": "1029736652724-u1uledq3b9adi9nvbh7be84dsuh0l58d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nirmitee.painPal",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1029736652724-uaeo1ik6arg5ehk3auil42j64sp2lagd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArQyPcHk5QVgSQx3WdaAPH3PDQFSw6BJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1029736652724-uaeo1ik6arg5ehk3auil42j64sp2lagd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

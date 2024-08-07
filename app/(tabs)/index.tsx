@@ -1,135 +1,103 @@
-import { useState, useEffect } from "react";
-import { Button, Image, StyleSheet, Text, Vibration, View } from "react-native";
-import * as Facebook from "expo-auth-session/providers/facebook";
-import * as WebBrowser from "expo-web-browser";
-import { ThemedText } from "@/components/ThemedText";
-import { Link } from "expo-router";
-import { ThemedButton } from "@/components/ThemedButton";
-import { ThemedView } from "@/components/ThemedView";
-import {
-  GoogleOneTapSignIn,
-  statusCodes,
-  isErrorWithCode,
-  GoogleSignin,
-} from '@react-native-google-signin/google-signin';
+import React, { useEffect, useState } from 'react';
+import { View, Button, Linking, StyleSheet, Alert, Text } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 
+GoogleSignin.configure({
+  webClientId: '1029736652724-uaeo1ik6arg5ehk3auil42j64sp2lagd.apps.googleusercontent.com',
+});
 
-WebBrowser.maybeCompleteAuthSession();
+const App = () => {
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
-export default function HomeScreen() {
-  const [user, setUser] = useState(null);
-  const [request, response, promptAsync] = Facebook.useAuthRequest({
-    clientId: "543724401318560", // change this for yours
-  });
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  async function onGoogleButtonPress() {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    // Get the user's ID token
+    const { idToken } = await GoogleSignin.signIn();
+  
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+  
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  }
 
   useEffect(() => {
-    if (response && response.type === "success" && response.authentication) {
-      (async () => {
-        const userInfoResponse = await fetch(
-          `https://graph.facebook.com/me?access_token=${response.authentication.accessToken}&fields=id,name,picture.type(large)`
-        );
-        const userInfo = await userInfoResponse.json();
-        setUser(userInfo);
-        console.log(userInfo)
-        console.log(JSON.stringify(response, null, 2));
-      })();
-    }
-  }, [response]);
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-  const handlePressAsync = async () => {
-    const result = await promptAsync();
-    if (result.type !== "success") {
-      alert("Uh oh, something went wrong");
-      return;
-    }
-  };
-const signIn = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleOneTapSignIn.signIn({
-      webClientId: `autoDetect`, // works only if you use Firebase
-      iosClientId:"com.googleusercontent.apps.592865013273-gg1a0vjnq0db1kqt0tr8stlgk8oa7fu8", // only needed if you're not using Firebase
-    });
-    // setState({ userInfo });
-    console.log({userInfo})
-  } catch (error) {
-    if (isErrorWithCode(error)) {
-      switch (error.code) {
-        case statusCodes.NO_SAVED_CREDENTIAL_FOUND:
-          // Android and Apple only. No saved credential found, try calling `createAccount`
-          break;
-        case statusCodes.SIGN_IN_CANCELLED:
-          // sign in was cancelled
-          break;
-        case statusCodes.ONE_TAP_START_FAILED:
-          // Android-only, you probably have hit rate limiting.
-          // On Android, you can still call `presentExplicitSignIn` in this case.
-          break;
-        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-          // Android-only: play services not available or outdated
-          // Web: when calling an unimplemented api (requestAuthorization)
-          break;
-        default:
-        // something else happened
+  useEffect(() => {
+    const handleDeepLink = (event) => {
+      const { url } = event;
+      // Extract data from the URL if needed
+      const data = url.split('://')[1];
+      Alert.alert('Deep link data', data); // Handle your deep link data here
+    };
+
+    Linking.addEventListener('url', handleDeepLink);
+
+    // Check if app was opened with a deep link
+    Linking.getInitialURL().then(url => {
+      if (url) {
+        handleDeepLink({ url });
       }
-    } else {
-      // an error that's not related to google sign in occurred
-    }
-  }
-};
-  return (
-    <ThemedView style={styles.container}>
-      {user ? (
-        <Profile user={user} />
-      ) : (
-        <>
-          <Button
-            disabled={!request}
-            title="Continue with Facebook"
-            onPress={handlePressAsync}
-          />
-          <Button
-            title="Continue with Google"
-            onPress={signIn}
-          />
-          {/* <Link href="/test" style={styles.link}>
-            <ThemedText>Go to home screen!</ThemedText>
-          </Link> */}
-        </>
-      )}
-    </ThemedView>
-  );
-}
+    });
 
-function Profile({ user }) {
+    // Cleanup
+    return () => {
+      Linking.removeEventListener('url', handleDeepLink);
+    };
+  }, []);
+
+  const handleOpenLink = () => {
+    const dynalink = 'https://nirmitee.dynalinks.app/?link=https://nextjs-portfolio-main-pj38r2ur6-nilu-tudu-4648s-projects.vercel.app/&apn=com.nirmitee.painPal';
+    Linking.openURL(dynalink).catch(err => console.error("Couldn't load page", err));
+  };
+
+  if (initializing) return null;
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Button
+          title="Google Sign-In"
+          onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
+        />
+        <Button
+          title="Open Dynalink"
+          onPress={handleOpenLink}
+        />
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.profile}>
-      <Image source={{ uri: user.picture.data.url }} style={styles.image} />
-      <ThemedText style={styles.name}>{user.name}</ThemedText>
-      <ThemedText>ID: {user.id}</ThemedText>
+    <View style={styles.container}>
+      <Text>Welcome {user.email}</Text>
+      <Button
+        title="Open Dynalink"
+        onPress={handleOpenLink}
+      />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  profile: {
-    alignItems: "center",
-  },
-  name: {
-    fontSize: 20,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
+
+export default App;
